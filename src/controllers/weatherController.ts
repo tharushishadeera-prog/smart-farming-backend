@@ -9,7 +9,7 @@ export const getWeatherData = async (req: Request, res: Response) => {
     const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
     
     const response = await axios.get(url);
-    const data = response.data;
+    const data: any = response.data;
 
     res.status(200).json({
       temp: Math.round(data.list[0].main.temp),

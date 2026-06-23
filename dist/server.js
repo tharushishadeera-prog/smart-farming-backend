@@ -1,0 +1,41 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const cropRoutes_1 = __importDefault(require("./routes/cropRoutes"));
+const expenseRoutes_1 = __importDefault(require("./routes/expenseRoutes"));
+const db_1 = __importDefault(require("./config/db"));
+const harvestRoutes_1 = __importDefault(require("./routes/harvestRoutes"));
+const dashboardRoutes_1 = __importDefault(require("./routes/dashboardRoutes"));
+const weatherRoutes_1 = __importDefault(require("./routes/weatherRoutes"));
+const aiRoutes_1 = __importDefault(require("./routes/aiRoutes"));
+const reportRoutes_1 = __importDefault(require("./routes/reportRoutes"));
+const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
+const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+dotenv_1.default.config();
+const app = (0, express_1.default)();
+app.use((0, cors_1.default)());
+app.use(express_1.default.json());
+app.use("/api/auth", authRoutes_1.default);
+app.use("/api/crops", cropRoutes_1.default);
+app.use("/api/expenses", expenseRoutes_1.default);
+app.use("/api/harvests", harvestRoutes_1.default);
+app.use("/api/dashboard", dashboardRoutes_1.default);
+app.use("/api/weather", weatherRoutes_1.default);
+app.use("/api/ai", aiRoutes_1.default);
+app.use('/api/reports', reportRoutes_1.default);
+app.use("/api/admin", adminRoutes_1.default);
+app.use('/api/users', userRoutes_1.default);
+(0, db_1.default)();
+app.get("/", (req, res) => {
+    res.send(" Smart Farming API Running...");
+});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(` Server running on port ${PORT}`);
+});
