@@ -14,7 +14,7 @@ export const getAIAdvice = async (req: AuthRequest, res: Response) => {
     const latestCrop = await Crop.findOne({ user: userId }).sort({ createdAt: -1 });
 
     if (!latestCrop) {
-      return res.json({ advice: "වගාවන් කිසිවක් සොයාගත නොහැක." });
+      return res.json({ advice: "can't find crop" });
     }
 
     // සරල AI Logic එක (Moisture අගය අනුව)

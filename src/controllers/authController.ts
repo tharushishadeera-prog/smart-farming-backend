@@ -19,7 +19,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             name,
             email,
             passwordHash,
-            role: role || 'farmer' // role එකක් යැව්වොත් ඒක ගන්න, නැත්නම් default 'farmer'
+            role: role || 'farmer' 
         });
 
         await newUser.save();
