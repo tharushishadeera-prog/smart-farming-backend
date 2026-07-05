@@ -4,7 +4,6 @@ import dns from "dns"
 
 const DB_URL = process.env.DB_URL as string
 
-// Force using a public DNS resolver for SRV lookups when system DNS refuses
 try {
     dns.setServers(["8.8.8.8", "8.8.4.4"])
 } catch (e) {

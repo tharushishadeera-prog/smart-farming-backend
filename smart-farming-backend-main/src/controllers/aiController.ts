@@ -57,7 +57,6 @@ Provide clear, practical, and concise farming advice in English.
 Farmer Question:
 ${message}
 `;
-
     const result = await model.generateContent(prompt);
 
     const reply = result.response.text();
