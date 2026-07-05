@@ -8,12 +8,14 @@ import mongoose from "mongoose";
 export const getDashboardStats = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const userId = req.user?.id;
-    const role = req.user?.role; 
+    const role = req.user?.role; // Middleware එකෙන් එන role එක
 
+    // 1. Admin නම් filter එකක් නැහැ (මුළු පද්ධතියේම දත්ත), 
+    //    Farmer නම් එයාගේ User ID එකට අදාළ දත්ත විතරයි.
     const filter = role === 'admin' ? {} : { user: userId };
     const userObjectId = role === 'admin' ? null : new mongoose.Types.ObjectId(userId);
 
-    
+    // 2. දත්ත ලබාගැනීම
     const [totalCrops, totalHarvests, expenses, earnings] = await Promise.all([
       Crop.countDocuments(filter),
       Harvest.countDocuments(filter),
@@ -25,7 +27,7 @@ export const getDashboardStats = async (req: AuthRequest, res: Response): Promis
         : Harvest.aggregate([{ $match: { user: userObjectId } }, { $group: { _id: null, total: { $sum: "$sellingPrice" } } }])
     ]);
 
-    
+    // 3. Response යැවීම
     res.status(200).json({
       totalCrops,
       totalHarvests,
@@ -42,7 +44,7 @@ export const getChartData = async (req: AuthRequest, res: Response) => {
     const userId = req.user?.id;
     const role = req.user?.role;
     
-   
+    // Admin නම් match එක හිස්, නැත්නම් user ට අදාළ දත්ත විතරයි
     const matchQuery = role === 'admin' ? {} : { user: new mongoose.Types.ObjectId(userId) };
 
     const [expenses, earnings] = await Promise.all([
@@ -58,6 +60,7 @@ export const getChartData = async (req: AuthRequest, res: Response) => {
       ])
     ]);
 
+    // මාස 12ට දත්ත format කිරීම (වැදගත්: e._id පාවිච්චි කරන්න)
     const chartData = Array.from({ length: 12 }, (_, i) => {
       const month = i + 1;
       const exp = expenses.find(e => e._id?.month === month || e._id === month);

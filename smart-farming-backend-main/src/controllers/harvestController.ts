@@ -15,7 +15,7 @@ export const createHarvest = async (req: AuthRequest, res: Response): Promise<vo
       quantity,
       sellingPrice,
       date,
-      user: req.user?.id 
+      user: req.user?.id // 🌟 මෙතැනදී User ID එක අනිවාර්යයෙන්ම දාන්න ඕනේ
     });
 
     const savedHarvest = await newHarvest.save();
@@ -25,7 +25,7 @@ export const createHarvest = async (req: AuthRequest, res: Response): Promise<vo
   }
 };
 
-
+// බෝගයකට අදාළ අස්වනු ලබාගැනීම
 export const getHarvestsByCrop = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { cropId } = req.params;
@@ -33,14 +33,16 @@ export const getHarvestsByCrop = async (req: AuthRequest, res: Response): Promis
     
     const harvests = await Harvest.find({ crop: cropId, user: req.user?.id });
     
-    console.log("Database response:", harvests); 
+    console.log("Database response:", harvests); // 🌟 මේක පේනවද බලන්න
     res.status(200).json(harvests);
   } catch (error) {
     res.status(500).json({ message: "Error fetching harvests", error });
   }
 };
+// Admin සඳහා සියලුම Harvests ලබා ගැනීමට
 export const getAllHarvests = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    // populate('user') මගින් farmer ගේ නම සහ 'crop' මගින් බෝගයේ නම ලබා ගනී
     const harvests = await Harvest.find().populate('user', 'name').populate('crop', 'name');
     res.status(200).json(harvests);
   } catch (error) {

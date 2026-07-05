@@ -1,24 +1,16 @@
-import mongoose from "mongoose"
-import dns from "dns"
+import mongoose from "mongoose";
 
+const connectDB = async (): Promise<void> => {
+  try {
+    await mongoose.connect(process.env.DB_URL as string);
 
-const DB_URL = process.env.DB_URL as string
+    console.log(" MongoDB Connected");
+  } catch (error) {
+    console.error(" MongoDB Connection Failed");
+    console.error(error);
 
-try {
-    dns.setServers(["8.8.8.8", "8.8.4.4"])
-} catch (e) {
-    // ignore if setServers not supported in environment
-}
+    process.exit(1);
+  }
+};
 
-const mongoDB = async () => {
-    try{
-        await mongoose.connect(DB_URL)
-        console.log("MongoDB connected")
-    }catch (error){
-        console.log("DB connection error:", error)
-        process.exit(1)
-    }
-}
-
-export default mongoDB
-
+export default connectDB;

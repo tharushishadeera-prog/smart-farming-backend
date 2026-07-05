@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User";
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name, email, password, role } = req.body; 
+        const { name, email, password, role } = req.body; // role එක අලුතින් ගන්න
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
@@ -48,16 +48,16 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         }
 
         // token eka hadanne methnin
-       
+        // login function එකේ token හදන තැන:
 const token = jwt.sign(
-    { id: user._id, role: user.role },
+    { id: user._id, role: user.role }, // මෙතන role එකත් දාන්න
     process.env.JWT_SECRET || "secret",
     { expiresIn: "1d" }
 );
 
 res.json({
     token,
-    user: { id: user._id, name: user.name, email: user.email, role: user.role } 
+    user: { id: user._id, name: user.name, email: user.email, role: user.role } // මෙතනත් role එක යවන්න
 });
     } catch (error) {
         res.status(500).json({ message: "Server Error", error });

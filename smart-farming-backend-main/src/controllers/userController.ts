@@ -3,6 +3,7 @@ import User from '../models/User';
 import Expense from '../models/Expense';
 import Crop from '../models/Crop';
 
+// 1. සියලුම පරිශීලකයින් (Users) ලබා ගැනීම
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
         const users = await User.find();
@@ -12,6 +13,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
     }
 };
 
+// 2. අලුත් පරිශීලකයෙකු එක් කිරීම
 export const addUser = async (req: Request, res: Response) => {
     const { name, email, role, status } = req.body;
     try {
@@ -22,6 +24,7 @@ export const addUser = async (req: Request, res: Response) => {
         res.status(400).json({ message: error.message });
     }
 };
+// 3. පරිශීලකයෙකු මකා දැමීම (Delete)
 export const deleteUser = async (req: Request, res: Response) => {
     try {
         await User.findByIdAndDelete(req.params.id);
@@ -31,6 +34,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     }
 };
 
+// 4. පරිශීලක තොරතුරු යාවත්කාලීන කිරීම (Update/Edit)
 export const updateUser = async (req: Request, res: Response) => {
     try {
         const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
